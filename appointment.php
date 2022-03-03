@@ -16,12 +16,15 @@ $mechanic_list = mysqli_query($conn, $sql);
 
 
 //Check if mechanic is already selected by the user
+$session_user = $_SESSION['email'];
+$sql_mechanic_user = "SELECT `mechanic_name` FROM `client_order` WHERE `client_email` = '$session_user'";
+$mechanic_user_result = mysqli_query($conn, $sql_mechanic_user);
+$mechanic_exists_list = array();
 
 
-
-
-
-
+while($row = mysqli_fetch_assoc($mechanic_user_result)) {
+    array_push($mechanic_exists_list, $row['mechanic_name']);
+}
 
 
 
@@ -82,7 +85,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php
                     //We can fetch in a better way using the while loop
                     while($row = mysqli_fetch_assoc($mechanic_list)) {
-                        echo "<option value = " . $row['name'] . "> ".$row['name']." </option>";
+                        if(!in_array($row['name'], $mechanic_exists_list)) {
+                            echo "<option value = " . $row['name'] . "> ".$row['name']." </option>";
+                        }
+                        
                     }
                 ?>
             </select>

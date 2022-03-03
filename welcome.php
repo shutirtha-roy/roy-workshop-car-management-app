@@ -6,6 +6,10 @@ session_start();
 if(!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true || $_SESSION['email'] == 'admin@gmail.com') {
   header("location: login.php");
   exit;
+} else {
+    $session_user = $_SESSION['email'];
+    $sql_total_orders = "SELECT * FROM client_order JOIN users ON client_order.`client_email` = users.`email` WHERE client_email = 'fahim@gmail.com';";
+    $user_order_result = mysqli_query($conn, $sql_total_orders);
 }
 ?>
 
@@ -28,7 +32,11 @@ if(!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true || $_SESSION['
 
     
 
-
+    <?php
+        while($row = mysqli_fetch_assoc($user_order_result)) {
+            echo var_dump($row);
+        }
+    ?>
 
 
 
