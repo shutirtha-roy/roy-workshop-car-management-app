@@ -8,7 +8,7 @@ if(!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true || $_SESSION['
   exit;
 } else {
     $session_user = $_SESSION['email'];
-    $sql_total_orders = "SELECT * FROM client_order JOIN users ON client_order.`client_email` = users.`email` WHERE client_email = 'fahim@gmail.com';";
+    $sql_total_orders = "SELECT * FROM client_order JOIN users ON client_order.`client_email` = users.`email` WHERE client_email = '$session_user';";
     $user_order_result = mysqli_query($conn, $sql_total_orders);
 }
 ?>
@@ -32,14 +32,30 @@ if(!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] != true || $_SESSION['
 
     
 
-    <?php
-        while($row = mysqli_fetch_assoc($user_order_result)) {
-            echo var_dump($row);
-        }
-    ?>
+    
 
-
-
+    <div class="table-content" style="text-align:center;">
+        <table style="text-align:center;">
+            <tr>
+                <th>SL. No</th>
+                <th>Appointment Date</th>
+                <th>Mechanic</th>
+            </tr>
+            <?php
+                $count = 1;
+                while($row = mysqli_fetch_assoc($user_order_result)) {
+                    $temp_date_appointment = $row['date_of_appointment'];
+                    $temp_mechanic_name = $row['mechanic_name'];
+                    echo "<tr>
+                            <td>$count</td>
+                            <td>$temp_date_appointment</td>
+                            <td>$temp_mechanic_name</td>
+                        </tr>";
+                    $count++;
+                }
+            ?>
+        </table>
+    </div>
 
 
     

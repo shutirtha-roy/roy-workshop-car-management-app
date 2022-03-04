@@ -27,10 +27,8 @@ while($row = mysqli_fetch_assoc($mechanic_user_result)) {
 }
 
 
-
-
-
-
+$mechanic_busy = false;
+$mechanic_extra = false;
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
     $client_email = $_SESSION['email'];
@@ -39,16 +37,24 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 
-    //If condition to check if date of appointment of a mechanic is greater than 4
+    //Condition to check if date of appointment of a mechanic is greater than 4
     $mechanic_appointment_count = "SELECT COUNT(*) as total FROM `client_order` WHERE `mechanic_name` = '$mechanic_name' AND `date_of_appointment` = '$date_of_appointment'";
     $count_result = mysqli_query($conn, $mechanic_appointment_count);
     $data=mysqli_fetch_assoc($count_result);
     $count_mechanic = $data['total'];
 
+    
+
 
     if($count_mechanic >= 4) {
-        echo "Mechanic " . $mechanic_name . "  is busy on that day";
-    } else {
+        $mechanic_unlimited_message = "Mechanic " . $mechanic_name . "  is busy on that day";
+        $mechanic_extra = true;
+        //echo $mechanic_unlimited_message;
+    } else if($mechanic_exists_list != []) {
+        $appointment_selected_message = "You have already selected an appointment";
+        $mechanic_busy = true;
+    }
+    else {
         $sql = "INSERT INTO `client_order` (`client_email`, `mechanic_name`, `date_of_appointment`) VALUES ('$client_email', '$mechanic_name', '$date_of_appointment');";
         $result = mysqli_query($conn, $sql);
 
@@ -108,11 +114,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     </form>
 
 
+<?php
+
+    if($mechanic_busy) {
+        echo $appointment_selected_message;
+    }
+    if($mechanic_extra) {
+        echo $mechanic_unlimited_message;
+    }
 
 
-
-
-
+?>
 
     
 </body>
