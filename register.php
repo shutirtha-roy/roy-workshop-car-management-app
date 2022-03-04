@@ -114,7 +114,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
 
         <div class="group-content">
-            <button type="submit" class="btn register">Register</button>
+            <button type="submit" class="btn login">Register</button>
         </div>
     </form>
 

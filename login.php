@@ -60,7 +60,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
 
         <div class="group-content">
-            <button type="submit" class="btn register">Login</button>
+            <button type="submit" class="btn login">Login</button>
         </div>
     </form>
 

@@ -17,18 +17,31 @@ $mechanic_list = mysqli_query($conn, $sql);
 
 //Check if mechanic is already selected by the user
 $session_user = $_SESSION['email'];
-$sql_mechanic_user = "SELECT `mechanic_name` FROM `client_order` WHERE `client_email` = '$session_user'";
+$sql_mechanic_user = "SELECT `mechanic_name`, `date_of_appointment` FROM `client_order` WHERE `client_email` = '$session_user'";
 $mechanic_user_result = mysqli_query($conn, $sql_mechanic_user);
 $mechanic_exists_list = array();
-
+$appointment_exists_list = array();
 
 while($row = mysqli_fetch_assoc($mechanic_user_result)) {
     array_push($mechanic_exists_list, $row['mechanic_name']);
+    array_push($appointment_exists_list, $row['date_of_appointment']);
 }
+
+
+
+
+
+
+
+
+
+
 
 
 $mechanic_busy = false;
 $mechanic_extra = false;
+
+$count_appointment = 0;
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
     $client_email = $_SESSION['email'];
@@ -45,13 +58,32 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
     
 
+    //Check if appointment on the same date
+    while($row = mysqli_fetch_assoc($mechanic_list)) {
+        if(in_array($date_of_appointment, $appointment_exists_list))
+            $count_appointment++;
+    }
+
+
+
+
+
+
+
+
+
+
 
     if($count_mechanic >= 4) {
         $mechanic_unlimited_message = "Mechanic " . $mechanic_name . "  is busy on that day";
         $mechanic_extra = true;
         //echo $mechanic_unlimited_message;
-    } else if($mechanic_exists_list != []) {
+    } /* else if($mechanic_exists_list != []) {
         $appointment_selected_message = "You have already selected an appointment";
+        $mechanic_busy = true;
+    } */
+    else if ($count_appointment > 0) {
+        $appointment_selected_message = "You have already selected an appointment on this date";
         $mechanic_busy = true;
     }
     else {

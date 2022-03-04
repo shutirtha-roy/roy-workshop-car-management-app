@@ -189,9 +189,13 @@ form {
     background-color:rgb(47, 47, 47);
     border-radius: 5px;
     color:rgb(246, 246, 246);
-    padding: 2vh;
+    padding: 2vh 0;
     font-weight: bold;
     cursor: pointer;
+}
+
+.login {
+    padding: 2vh;
 }
 
 .btn:hover {
